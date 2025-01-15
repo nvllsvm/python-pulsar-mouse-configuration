@@ -1,0 +1,1 @@
+ATTRS{idVendor}=="3554", ATTRS{idProduct}=="f508", MODE="0664", GROUP="input"
