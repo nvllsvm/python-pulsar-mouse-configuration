@@ -32,9 +32,10 @@ Simply clone this repository and run `python3 pulsar.py`.
 
 ## Usage
 ```
-$ ./pulsar.py  --help
+$ ./pulsar.py --help
 usage: pulsar.py [-h] [--dpi DPI] [--dpi-mode DPI_MODE] [--led-brightness LED_BRIGHTNESS] [--led-color LED_COLOR]
-                 [--led-effect {off,steady,breathe}] [--polling-rate {1000,500,250,125}] [--restore]
+                 [--led-effect {off,steady,breathe}] [--motion-sync {on,off}] [--lod-ripple {on,off}] [--angle-snapping {on,off}]
+                 [--polling-rate {1000,500,250,125}] [--restore]
 
 options:
   -h, --help            show this help message and exit
@@ -43,6 +44,9 @@ options:
   --led-brightness LED_BRIGHTNESS
   --led-color LED_COLOR
   --led-effect {off,steady,breathe}
+  --motion-sync {on,off}
+  --lod-ripple {on,off}
+  --angle-snapping {on,off}
   --polling-rate {1000,500,250,125}
   --restore             restore factory-default settings
 ```

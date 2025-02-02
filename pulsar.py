@@ -746,13 +746,37 @@ class PulsarX2V2Mini:
     def motion_sync(self):
         return bool(self.settings[ADDR_MOTION_SYNC])
 
+    @motion_sync.setter
+    def motion_sync(self, enabled):
+        value = Bool(enabled)
+        self._mem_set({
+            ADDR_MOTION_SYNC: value,
+            ADDR_MOTION_SYNC_CHECKSUM: checksum(value)
+        })
+
     @property
     def lod_ripple(self):
         return bool(self.settings[ADDR_LOD_RIPPLE])
 
+    @lod_ripple.setter
+    def lod_ripple(self, enabled):
+        value = Bool(enabled)
+        self._mem_set({
+            ADDR_LOD_RIPPLE: value,
+            ADDR_LOD_RIPPLE_CHECKSUM: checksum(value)
+        })
+
     @property
     def angle_snapping(self):
         return bool(self.settings[ADDR_ANGLE_SNAPPING])
+
+    @angle_snapping.setter
+    def angle_snapping(self, enabled):
+        value = Bool(enabled)
+        self._mem_set({
+            ADDR_ANGLE_SNAPPING: value,
+            ADDR_ANGLE_SNAPPING_CHECKSUM: checksum(value)
+        })
 
     @property
     def led_effect(self):
@@ -937,6 +961,27 @@ def _parser_set(args):
     if args.led_color is not None:
         x2v2.led_color = args.led_color
 
+    if args.motion_sync is not None:
+        match args.motion_sync:
+            case 'off':
+                x2v2.motion_sync = False
+            case 'on':
+                x2v2.motion_sync = True
+
+    if args.lod_ripple is not None:
+        match args.lod_ripple:
+            case 'off':
+                x2v2.lod_ripple = False
+            case 'on':
+                x2v2.lod_ripple = True
+
+    if args.angle_snapping is not None:
+        match args.angle_snapping:
+            case 'off':
+                x2v2.angle_snapping = False
+            case 'on':
+                x2v2.angle_snapping = True
+
     if args.led_effect is not None:
         match args.led_effect:
             case 'off':
@@ -1029,6 +1074,9 @@ def main():
     parser.add_argument('--led-brightness', type=int)
     parser.add_argument('--led-color', type=_parser_color)
     parser.add_argument('--led-effect', choices=['off', 'steady', 'breathe'])
+    parser.add_argument('--motion-sync', choices=['on', 'off'])
+    parser.add_argument('--lod-ripple', choices=['on', 'off'])
+    parser.add_argument('--angle-snapping', choices=['on', 'off'])
     parser.add_argument('--polling-rate', type=int, choices=PollingRateHz)
 
     # does not fail when profile does not exist
