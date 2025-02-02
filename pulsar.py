@@ -488,7 +488,8 @@ def checksum(*values):
 
 class Device:
     VENDOR_ID = 0x3554  # Pulsar
-    DEVICE_ID = 0xf508  # X2V2 Mini (regular wireless dongle)
+    WIRELESS_1KHZ_DEVICE_ID = 0xf508  # X2V2 Mini (1khz wireless dongle)
+    WIRED_DEVICE_ID = 0xf507  # X2V2 Mini (wired)
 
     INTERFACES = {
         0: {'endpoint': 0x81, 'length': 8},
@@ -501,9 +502,17 @@ class Device:
         info = self.INTERFACES[self.interface]
         self.length = info['length']
         self.endpoint = info['endpoint']
-        self.device = usb.core.find(idVendor=self.VENDOR_ID, idProduct=self.DEVICE_ID)
-        self.device.reset()
-        self.open_device(self.get_device(self.VENDOR_ID, self.DEVICE_ID), 1)
+
+        for device_id in (self.WIRELESS_1KHZ_DEVICE_ID, self.WIRED_DEVICE_ID):
+            self.device = usb.core.find(idVendor=self.VENDOR_ID, idProduct=device_id)
+            if self.device is None:
+                continue
+            else:
+                self.device.reset()
+                self.open_device(self.get_device(self.VENDOR_ID, device_id), 1)
+                break
+        if self.device is None:
+            raise RuntimeError
 
     @staticmethod
     def get_device(vendor_id, device_id):
